@@ -302,11 +302,14 @@ body {
                         <stop offset=".38" stop-color="#eef3ff" stop-opacity=".65"/>
                         <stop offset="1" stop-color="#dce7ff" stop-opacity="0"/>
                     </radialGradient>
+                    <clipPath id="lampGlowBelowRim">
+                        <rect x="0" y="98" width="140" height="47"/>
+                    </clipPath>
                 </defs>
                 <path d="M70 1V34" stroke="#111214" stroke-width="6"/>
                 <path d="M68 2V33" stroke="#77787a" stroke-width="1"/>
                 <path d="M60 29h20v10H60z" fill="#292a2d" stroke="#88898c" stroke-width="1.5"/>
-                <ellipse class="lamp-glow" cx="70" cy="116" rx="48" ry="37" fill="url(#lampLight)"/>
+                <ellipse class="lamp-glow" cx="70" cy="116" rx="48" ry="37" fill="url(#lampLight)" clip-path="url(#lampGlowBelowRim)"/>
                 <path d="M37 42h66l16 49q-49 14-98 0z" fill="#17181b" stroke="#858689" stroke-width="2.5" stroke-linejoin="round"/>
                 <path d="M42 46h56l12 39q-40 11-80 0z" fill="#292a2d" stroke="#090a0b" stroke-width="2"/>
                 <path d="M43 48l-8 34m19-34-4 17m45-17 8 33M80 48l3 12M31 85l15 3m45 2 17-5" fill="none" stroke="#999a9d" stroke-width="1.5" opacity=".75"/>
