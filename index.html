@@ -12,7 +12,60 @@ body {
     margin: 0; min-height: 100vh; background: #000; color: #ddd;
     font-family: Georgia, serif; overflow-x: hidden;
 }
-.top { display: flex; justify-content: center; padding: 100px 16px 0; }
+.top { display: flex; justify-content: center; padding: 190px 16px 0; }
+.title-stage {
+    position: relative; display: flex; align-items: center;
+    justify-content: center; gap: 18px;
+}
+.piano-mannequin {
+    display: block; width: clamp(76px, 12vw, 112px);
+    height: clamp(105px, 16vw, 145px); object-fit: contain;
+    filter: grayscale(1) brightness(.78); opacity: .9;
+}
+.lamp {
+    position: absolute; z-index: 2; left: 50%; top: -166px;
+    width: 150px; height: 158px; transform: translateX(-50%);
+    pointer-events: none; display: flex; flex-direction: column;
+    align-items: center;
+}
+.lamp-cord {
+    width: 2px; height: 48px; background: #555;
+    box-shadow: 0 0 3px #777;
+}
+.lamp-cap {
+    width: 13px; height: 8px; background: #555;
+    border: 1px solid #777; border-radius: 3px 3px 0 0;
+}
+.lamp-shade {
+    width: 76px; height: 34px; margin-top: -1px;
+    background: linear-gradient(180deg, #555, #222 75%);
+    border: 1px solid #777; border-radius: 8px 8px 24px 24px;
+    clip-path: polygon(16% 0, 84% 0, 100% 100%, 0 100%);
+    box-shadow: 0 5px 12px rgba(0,0,0,.9);
+}
+.lamp-bulb {
+    width: 15px; height: 18px; margin-top: -3px;
+    border-radius: 50% 50% 45% 45%; background: #d8c99e;
+    box-shadow: 0 0 12px 5px rgba(214,190,128,.42);
+    animation: bulbFlicker 6s infinite;
+}
+.lamp-glow {
+    position: absolute; top: 82px; left: 50%;
+    width: 220px; height: 115px; transform: translateX(-50%);
+    background: radial-gradient(ellipse at top, rgba(218,195,137,.22), rgba(180,155,100,.08) 38%, transparent 72%);
+    filter: blur(7px); mix-blend-mode: screen;
+    animation: glowFlicker 6s infinite; z-index: -1;
+}
+@keyframes bulbFlicker {
+    0%, 78%, 83%, 88%, 100% { opacity: 1; box-shadow: 0 0 12px 5px rgba(214,190,128,.42); }
+    79%, 81%, 85% { opacity: .25; box-shadow: 0 0 3px 1px rgba(214,190,128,.12); }
+    90%, 96% { opacity: .65; }
+}
+@keyframes glowFlicker {
+    0%, 78%, 83%, 88%, 100% { opacity: 1; }
+    79%, 81%, 85% { opacity: .12; }
+    90%, 96% { opacity: .55; }
+}
 .main-button {
     background: transparent; color: #aaa; border: 1px solid #555;
     padding: 16px 30px; font-family: Georgia, serif;
@@ -170,7 +223,11 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 @media (max-width: 600px) {
-    .top { padding-top: 110px; }
+    .top { padding-top: 180px; }
+    .title-stage { gap: 9px; }
+    .piano-mannequin { width: 68px; height: 96px; }
+    .lamp { top: -150px; transform: translateX(-50%) scale(.86); }
+    .main-button { padding: 14px 17px; letter-spacing: 4px; font-size: 17px; }
     .music { top: 15px; right: 12px; }
     .music-button { font-size: 10px; padding: 8px; }
     .crew-panel { margin-top: 20px; padding: 18px 10px; }
@@ -239,7 +296,17 @@ body {
 </div>
 
 <div class="top">
-    <button class="main-button" id="crewButton" aria-expanded="false">ДАУН CREW</button>
+    <div class="title-stage">
+        <img class="piano-mannequin" src="piano.gif" alt="Манекен играет на пианино">
+        <div class="lamp" aria-hidden="true">
+            <span class="lamp-cord"></span>
+            <span class="lamp-cap"></span>
+            <span class="lamp-shade"></span>
+            <span class="lamp-bulb"></span>
+            <span class="lamp-glow"></span>
+        </div>
+        <button class="main-button" id="crewButton" aria-expanded="false">ДАУН CREW</button>
+    </div>
 </div>
 
 <div class="crew-panel" id="crewPanel">
