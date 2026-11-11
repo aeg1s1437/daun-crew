@@ -23,11 +23,12 @@ body {
     filter: grayscale(1) brightness(.78); opacity: .9;
 }
 .lamp {
-    position: absolute; z-index: 2; left: 50%; top: -184px;
-    width: 190px; height: 190px; transform: translateX(-50%);
+    position: absolute; z-index: 0; left: 50%; top: -184px;
+    width: 160px; height: 160px; transform: translateX(-50%);
     pointer-events: none; overflow: visible;
 }
 .lamp-art { display: block; width: 100%; height: 100%; overflow: visible; }
+.title-stage .main-button { position: relative; z-index: 1; }
 .lamp-bulb.flicker { animation: bulbFlash .55s ease-out; }
 .lamp-glow.flicker { animation: glowFlash .55s ease-out; }
 @keyframes bulbFlash {
@@ -209,7 +210,7 @@ body {
     .top { padding-top: 180px; }
     .title-stage { gap: 9px; }
     .piano-mannequin { width: 68px; height: 96px; }
-    .lamp { top: -166px; transform: translateX(-50%) scale(.86); }
+    .lamp { top: -166px; width: 145px; height: 145px; transform: translateX(-50%); }
     .title-stage { transform: translateX(-12px); }
     .main-button { padding: 14px 17px; letter-spacing: 4px; font-size: 17px; }
     .music { top: 15px; right: 12px; }
