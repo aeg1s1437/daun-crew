@@ -297,65 +297,47 @@ body {
         <div class="lamp" aria-hidden="true">
             <svg viewBox="0 0 140 145" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="lampIron" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0" stop-color="#77787a"/>
-                        <stop offset=".18" stop-color="#343538"/>
-                        <stop offset=".52" stop-color="#090a0b"/>
-                        <stop offset=".78" stop-color="#242527"/>
-                        <stop offset="1" stop-color="#66676a"/>
-                    </linearGradient>
-                    <linearGradient id="lampRim" x1="0" y1="0" x2="0" y2="1">
-                        <stop stop-color="#77787b"/>
-                        <stop offset=".35" stop-color="#17181a"/>
-                        <stop offset="1" stop-color="#050506"/>
-                    </linearGradient>
                     <radialGradient id="lampLight">
                         <stop stop-color="#fff" stop-opacity=".95"/>
                         <stop offset=".3" stop-color="#eef3ff" stop-opacity=".5"/>
                         <stop offset="1" stop-color="#dce7ff" stop-opacity="0"/>
                     </radialGradient>
-                    <filter id="lampWear">
-                        <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="8"/>
-                        <feColorMatrix values=".35 0 0 0 .25 .35 0 0 0 .25 .35 0 0 0 .27 0 0 0 .22 0"/>
-                    </filter>
-                    <clipPath id="shadeClip">
-                        <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"/>
-                    </clipPath>
                 </defs>
 
-                <!-- Старый подвес и потемневший кабель -->
-                <path d="M70 0 C69 12 73 21 70 34" fill="none" stroke="#09090a" stroke-width="5"/>
-                <path d="M68 1 C68 13 70 23 68 34" fill="none" stroke="#77787a" stroke-width="1" opacity=".55"/>
-                <path d="M62 29 Q70 25 78 30 L80 39 Q70 43 60 39 Z" fill="url(#lampIron)" stroke="#77787a" stroke-width="1"/>
-                <path d="M65 31l-2 6M74 30l2 6" stroke="#999a9c" stroke-width="1" opacity=".55"/>
+                <!-- Плоский старый подвес -->
+                <path d="M70 1 L70 34" stroke="#09090a" stroke-width="6"/>
+                <path d="M68 2 L68 33" stroke="#77787a" stroke-width="1" opacity=".7"/>
+                <path d="M61 29 L79 29 L81 39 L59 39 Z"
+                      fill="#252629" stroke="#858689" stroke-width="1.5"/>
+                <path d="M64 31l-2 6M75 31l2 6" stroke="#aaa" stroke-width="1" opacity=".55"/>
 
-                <!-- Свет находится за абажуром, поэтому корпус частично перекрывает ореол -->
+                <!-- Свет за корпусом: виден только снизу и по краям -->
                 <ellipse class="lamp-glow" cx="70" cy="116" rx="37" ry="27" fill="url(#lampLight)"/>
 
-                <!-- Неровный металлический абажур -->
-                <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"
-                      fill="#17181b" stroke="#a0a1a3" stroke-width="2.2"/>
-                <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"
-                      fill="url(#lampIron)" stroke="#77787a" stroke-width="1.4"/>
-                <g clip-path="url(#shadeClip)" opacity=".72">
-                    <rect x="18" y="35" width="104" height="76" filter="url(#lampWear)"/>
-                    <path d="M42 44l-8 36M51 41l-5 21M96 46l11 35M78 43l-3 15M30 84l13 4M91 91l18-5"
-                          stroke="#c0c0c2" stroke-width="1.2" fill="none"/>
-                    <path d="M58 40l-2 8M84 47l3 7M109 78l-5 8M25 74l6 3"
-                          stroke="#080809" stroke-width="2" fill="none"/>
-                </g>
-                <path d="M37 42 Q69 34 103 43" fill="none" stroke="#a0a1a3" stroke-width="1.2" opacity=".65"/>
-                <path d="M21 91 Q69 105 119 91 L116 99 Q70 114 24 99 Z"
-                      fill="url(#lampRim)" stroke="#858689" stroke-width="1.5"/>
-                <path d="M27 94 Q70 106 113 94" fill="none" stroke="#080809" stroke-width="2"/>
-                <circle cx="39" cy="46" r="2" fill="#080809" stroke="#77787a" stroke-width=".8"/>
-                <circle cx="99" cy="47" r="2" fill="#080809" stroke="#77787a" stroke-width=".8"/>
+                <!-- Двухмерный потёртый металлический абажур -->
+                <path d="M37 42 L103 42 L119 91 Q70 105 21 91 Z"
+                      fill="#17181b" stroke="#858689" stroke-width="2.5"
+                      stroke-linejoin="round"/>
+                <path d="M40 45 L100 45 L112 86 Q70 98 28 86 Z"
+                      fill="#292a2d" stroke="#08090a" stroke-width="2"/>
+                <path d="M42 47 L35 82 M51 46 L47 66 M96 47 L105 80
+                         M82 48 L85 60 M31 84 L45 88 M91 91 L108 86"
+                      fill="none" stroke="#929397" stroke-width="1.5" opacity=".65"/>
+                <path d="M57 45l-3 8M72 47l-2 5M108 70l-5 7M38 70l4 3"
+                      fill="none" stroke="#090a0b" stroke-width="2.2"/>
+                <path d="M37 42 L103 42" fill="none" stroke="#b0b1b3" stroke-width="1.2" opacity=".65"/>
+                <path d="M21 91 Q70 104 119 91 L116 99 Q70 112 24 99 Z"
+                      fill="#101113" stroke="#77787b" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M28 95 Q70 106 112 95" fill="none" stroke="#050506" stroke-width="2.5"/>
+                <path d="M39 45l-2 5M99 45l2 5" stroke="#08090a" stroke-width="2"/>
+                <circle cx="39" cy="46" r="2" fill="#a1a2a4"/>
+                <circle cx="99" cy="46" r="2" fill="#a1a2a4"/>
 
-                <!-- Холодная лампочка и свет -->
-
-                <path d="M57 91 Q70 86 83 92 L80 112 Q70 119 60 112 Z"
-                      fill="#bfc5cf" opacity=".22"/>
-                <path class="lamp-bulb" d="M62 94 Q70 89 78 94 L76 108 Q70 114 64 108 Z"/>
+                <!-- Лампочка выглядывает из-под нижнего края -->
+                <path d="M57 94 Q70 87 83 94 L80 111 Q70 119 60 111 Z"
+                      fill="#bfc5cf" opacity=".2"/>
+                <path class="lamp-bulb"
+                      d="M62 94 Q70 89 78 94 L76 108 Q70 114 64 108 Z"/>
                 <path d="M65 110h10v5H65z" fill="#303135" stroke="#8a8b8e" stroke-width="1"/>
                 <path d="M66 112h8M66 114h8" stroke="#aaa" stroke-width=".7" opacity=".6"/>
             </svg>
