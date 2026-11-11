@@ -33,7 +33,8 @@ body {
     pointer-events: none;
     overflow: visible;
 }
-.lamp svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.lamp svg { display: block; width: 100%; height: 100%; overflow: visible; opacity: 1; }
+.lamp svg path, .lamp svg circle { opacity: 1; }
 .lamp-glow {
     fill: #f4f7ff;
     opacity: .3;
@@ -311,8 +312,10 @@ body {
 
                 <!-- Неровный металлический абажур -->
                 <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"
-                      fill="url(#lampIron)" stroke="#77787a" stroke-width="2"/>
-                <g clip-path="url(#shadeClip)" opacity=".42">
+                      fill="#17181b" stroke="#a0a1a3" stroke-width="2.2"/>
+                <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"
+                      fill="url(#lampIron)" stroke="#77787a" stroke-width="1.4"/>
+                <g clip-path="url(#shadeClip)" opacity=".72">
                     <rect x="18" y="35" width="104" height="76" filter="url(#lampWear)"/>
                     <path d="M42 44l-8 36M51 41l-5 21M96 46l11 35M78 43l-3 15M30 84l13 4M91 91l18-5"
                           stroke="#c0c0c2" stroke-width="1.2" fill="none"/>
