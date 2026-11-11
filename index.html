@@ -24,56 +24,10 @@ body {
 }
 .lamp {
     position: absolute; z-index: 2; left: 50%; top: -184px;
-    width: 170px; height: 176px; transform: translateX(-50%);
-    pointer-events: none; display: flex; flex-direction: column;
-    align-items: center;
-    filter: grayscale(1) contrast(1.2);
+    width: 190px; height: 190px; transform: translateX(-50%);
+    pointer-events: none; overflow: visible;
 }
-.lamp-cord {
-    width: 3px; height: 59px;
-    background: linear-gradient(90deg, #080808, #777 38%, #171717 72%, #050505);
-    box-shadow: 1px 0 2px #000, -1px 0 1px #999;
-}
-.lamp-cap {
-    width: 18px; height: 12px; margin-top: -1px;
-    background: linear-gradient(90deg, #111, #777 35%, #292929 68%, #080808);
-    border: 1px solid #777; border-radius: 3px 3px 1px 1px;
-    box-shadow: 0 2px 4px #000;
-}
-.lamp-shade {
-    position: relative; width: 104px; height: 48px; margin-top: -1px;
-    background:
-        repeating-linear-gradient(104deg, transparent 0 8px, rgba(230,230,230,.09) 9px, transparent 10px 16px),
-        repeating-linear-gradient(5deg, rgba(0,0,0,.25) 0 2px, transparent 2px 6px),
-        linear-gradient(180deg, #777 0%, #444 17%, #202020 62%, #090909 100%);
-    border: 1px solid #888;
-    border-radius: 13px 13px 50% 50% / 12px 12px 25% 25%;
-    clip-path: polygon(17% 0, 83% 0, 100% 100%, 0 100%);
-    box-shadow: inset 0 3px 5px rgba(255,255,255,.2), 0 7px 13px rgba(0,0,0,.95);
-}
-.lamp-shade::before {
-    content: ""; position: absolute; inset: 4px 12px 7px;
-    background: repeating-linear-gradient(117deg, transparent 0 7px, rgba(235,235,235,.18) 8px, transparent 9px 14px);
-    opacity: .7; mix-blend-mode: screen;
-}
-.lamp-shade::after {
-    content: ""; position: absolute; left: 4%; right: 4%; bottom: 0;
-    height: 5px; border-radius: 50%;
-    background: linear-gradient(90deg, #111, #aaa 48%, #171717);
-    box-shadow: 0 1px 5px rgba(210,210,210,.18);
-}
-.lamp-bulb {
-    width: 16px; height: 20px; margin-top: -4px;
-    border-radius: 45% 45% 48% 48%;
-    background: radial-gradient(ellipse at 35% 25%, #ddd, #777 55%, #252525);
-    box-shadow: 0 0 10px 4px rgba(205,205,205,.18), 0 0 32px 13px rgba(190,190,190,.08);
-}
-.lamp-glow {
-    position: absolute; top: 105px; left: 50%;
-    width: 270px; height: 155px; transform: translateX(-50%);
-    background: radial-gradient(ellipse at 50% 0%, rgba(220,220,220,.13), rgba(160,160,160,.055) 36%, transparent 72%);
-    filter: blur(10px); mix-blend-mode: screen; z-index: -1;
-}
+.lamp-art { display: block; width: 100%; height: 100%; overflow: visible; }
 .lamp-bulb.flicker { animation: bulbFlash .55s ease-out; }
 .lamp-glow.flicker { animation: glowFlash .55s ease-out; }
 @keyframes bulbFlash {
@@ -85,6 +39,11 @@ body {
 }
 @keyframes glowFlash {
     0%, 100% { opacity: 1; }
+    18% { opacity: .12; }
+    34% { opacity: .95; }
+    48% { opacity: .2; }
+    68% { opacity: 1.35; }
+}
     18% { opacity: .12; }
     34% { opacity: .95; }
     48% { opacity: .2; }
@@ -324,11 +283,56 @@ body {
     <div class="title-stage">
         <img class="piano-mannequin" src="piano.gif" alt="Манекен играет на пианино">
         <div class="lamp" aria-hidden="true">
-            <span class="lamp-cord"></span>
-            <span class="lamp-cap"></span>
-            <span class="lamp-shade"></span>
-            <span class="lamp-bulb"></span>
-            <span class="lamp-glow"></span>
+            <svg class="lamp-art" viewBox="0 0 190 190" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="iron" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#080808"/><stop offset=".24" stop-color="#625d55"/>
+                        <stop offset=".43" stop-color="#171615"/><stop offset=".68" stop-color="#777064"/>
+                        <stop offset="1" stop-color="#050505"/>
+                    </linearGradient>
+                    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#fff" stop-opacity=".85"/>
+                        <stop offset=".42" stop-color="#dce5eb" stop-opacity=".2"/>
+                        <stop offset="1" stop-color="#fff" stop-opacity=".55"/>
+                    </linearGradient>
+                    <linearGradient id="whiteFilament" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#f4f7ff"/>
+                        <stop offset="1" stop-color="#cbd8e8"/>
+                    </linearGradient>
+                    <radialGradient id="whiteAura">
+                        <stop offset="0" stop-color="#fff" stop-opacity=".42"/>
+                        <stop offset=".38" stop-color="#e8efff" stop-opacity=".2"/>
+                        <stop offset="1" stop-color="#dce8ff" stop-opacity="0"/>
+                    </radialGradient>
+                    <filter id="whiteBlur" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="5"/>
+                    </filter>
+                    <pattern id="metalWear" width="17" height="13" patternUnits="userSpaceOnUse">
+                        <path d="M2 2l4-1M11 8l4-2M5 12l2-1" stroke="#eee" stroke-opacity=".28" stroke-width=".7"/>
+                    </pattern>
+                </defs>
+                <ellipse class="lamp-glow" cx="95" cy="132" rx="88" ry="62" fill="url(#whiteAura)" filter="url(#whiteBlur)"/>
+                <g fill="none" stroke-linecap="round">
+                    <path d="M95 0v34" stroke="#080808" stroke-width="5"/>
+                    <path d="M95 0v34" stroke="#a9a9a9" stroke-opacity=".8" stroke-width="1.1"/>
+                    <path d="M91 2c-5 4-5 9 0 12 5 3 5 8 0 11M99 2c5 4 5 9 0 12-5 3-5 8 0 11" stroke="#5f5b55" stroke-width="2"/>
+                </g>
+                <path d="M82 30h26l4 17H78z" fill="url(#iron)" stroke="#aaa" stroke-width="1"/>
+                <path d="M80 36h30M79 42h32" stroke="#ddd" stroke-opacity=".32"/>
+                <path d="M95 45c-16 0-29 5-40 13l-31 45c-2 3 0 7 4 8 19 6 41 9 67 9s48-3 67-9c4-1 6-5 4-8l-31-45c-11-8-24-13-40-13z" fill="url(#iron)" stroke="#a9a49b" stroke-width="1.4"/>
+                <path d="M55 58c18-11 62-15 80 0l29 45c-22 8-108 8-138 0z" fill="url(#metalWear)" opacity=".9"/>
+                <path d="M25 103c33 10 107 10 140 0l-4 8c-34 11-98 11-132 0z" fill="#090909" stroke="#aaa" stroke-width="1"/>
+                <path d="M28 104c35 8 99 8 134 0" stroke="#eee" stroke-opacity=".55" stroke-width="1.3" fill="none"/>
+                <path d="M48 68l-9 27M65 57l-5 39M142 62l11 32M126 56l7 40" stroke="#fff" stroke-opacity=".2" stroke-width="1.2"/>
+                <g class="lamp-bulb">
+                    <path d="M86 111h18v10c0 5-3 8-4 12-1 4-1 15-5 15s-4-11-5-15c-1-4-4-7-4-12z" fill="url(#glass)" stroke="#fff" stroke-opacity=".85" stroke-width="1"/>
+                    <path d="M90 113v13c0 4 2 6 3 10M100 113v13c0 4-2 6-3 10" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="1"/>
+                    <path d="M92 112v8l-4 5 7 5 7-5-4-5v-8" fill="none" stroke="url(#whiteFilament)" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M95 130v9" stroke="#fff" stroke-width="1.3"/>
+                    <path d="M90 145h10" stroke="#eee" stroke-opacity=".65"/>
+                </g>
+                <ellipse cx="95" cy="128" rx="20" ry="25" fill="#fff" opacity=".12" filter="url(#whiteBlur)"/>
+            </svg>
         </div>
         <button class="main-button" id="crewButton" aria-expanded="false">ДАУН CREW</button>
     </div>
