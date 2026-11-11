@@ -1,0 +1,19 @@
+
+{
+  "name": "dalbaeb-crew",
+  "version": "1.0.0",
+  "description": "ДАУН CREW",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "discord.js": "^14.28.1",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0"
+  }
+}

@@ -1,0 +1,640 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ДАУН CREW</title>
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0; min-height: 100vh; background: #000; color: #ddd;
+    font-family: Georgia, serif; overflow-x: hidden;
+}
+.top { display: flex; justify-content: center; padding: 100px 16px 0; }
+.main-button {
+    background: transparent; color: #aaa; border: 1px solid #555;
+    padding: 16px 30px; font-family: Georgia, serif;
+    font-size: clamp(18px, 4vw, 25px); letter-spacing: 7px;
+    cursor: pointer; transition: .3s ease;
+}
+.main-button:hover, .main-button.active {
+    color: white; border-color: #aaa; background: #111;
+}
+.music { position: absolute; top: 25px; right: 30px; z-index: 20; }
+.music-button, .back-button, .close-button {
+    background: transparent; color: #aaa; border: 1px solid #555;
+    padding: 10px 16px; font-family: Georgia, serif;
+    letter-spacing: 2px; cursor: pointer; transition: .3s;
+}
+.music-button:hover, .back-button:hover, .close-button:hover {
+    color: white; border-color: #aaa;
+}
+.dropdown, .crew-panel {
+    background: #111; border: 1px solid #444; opacity: 0;
+    visibility: hidden; pointer-events: none; transform: translateY(-8px);
+    transition: opacity .3s ease, transform .3s ease, visibility .3s;
+}
+.dropdown.show, .crew-panel.show {
+    opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0);
+}
+.dropdown {
+    position: absolute; right: 0; top: 45px;
+    width: min(360px, calc(100vw - 24px));
+    max-height: min(80vh, 650px); overflow-y: auto;
+    padding: 14px; text-align: center; z-index: 30;
+}
+.music-heading {
+    color: #aaa; font-size: 14px; letter-spacing: 3px; margin-bottom: 14px;
+}
+.music-members { display: flex; flex-direction: column; gap: 7px; }
+.music-member {
+    position: relative; width: 100%; padding: 12px 10px;
+    background: #191919; border: 1px solid #393939; color: #bbb;
+    font-family: Georgia, serif; letter-spacing: 1px; font-size: 13px;
+    cursor: pointer; transition: .25s;
+}
+.music-member.available:hover {
+    background: #292929; color: white; border-color: #999;
+}
+.music-member.locked { color: #555; cursor: not-allowed; overflow: hidden; }
+.soon-label {
+    position: absolute; inset: 0; display: flex; align-items: center;
+    justify-content: center; background: rgba(0,0,0,.78);
+    color: #aaa; font-size: 12px; letter-spacing: 5px;
+}
+.playlist-view { display: none; }
+.playlist-view.active { display: block; animation: fadeIn .3s ease; }
+.member-view.hidden { display: none; }
+.back-button { display: block; width: 100%; margin-bottom: 12px; padding: 9px; }
+.playlist-title {
+    color: #bbb; font-size: 13px; letter-spacing: 2px; margin: 8px 0 12px;
+}
+.dropdown iframe {
+    display: block; width: 100%; height: 300px; border: none; border-radius: 4px;
+}
+.volume-area {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 13px; padding: 8px 3px;
+}
+.volume-icon { color: #aaa; font-size: 17px; }
+.volume-slider {
+    flex: 1; height: 4px; accent-color: #ff5500; cursor: pointer;
+}
+.volume-value {
+    min-width: 38px; color: #999; font-size: 12px; text-align: right;
+}
+.music-options {
+    display: flex; justify-content: center; align-items: center;
+    gap: 12px; margin-top: 12px;
+}
+.music-option {
+    position: relative; display: flex; align-items: center;
+    justify-content: center; width: 43px; height: 38px; padding: 7px;
+    background: transparent; border: 1px solid transparent;
+    border-radius: 5px; color: #999; cursor: pointer; transition: .2s ease;
+}
+.music-option:hover { color: #eee; background: #252525; }
+.music-option.active { color: #ff5500; }
+.music-option svg {
+    width: 22px; height: 22px; fill: none; stroke: currentColor;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.music-option .repeat-one {
+    position: absolute; font-family: Arial, sans-serif; font-size: 9px;
+    font-weight: bold; background: #111; padding: 0 2px;
+    top: 17px; left: 19px; color: currentColor;
+}
+.music-option .option-status {
+    position: absolute; top: 38px; left: 50%; transform: translateX(-50%);
+    font-size: 9px; color: #666; white-space: nowrap;
+    opacity: 0; pointer-events: none;
+}
+.music-option.active .option-status { color: #ff5500; }
+.subtitles-toggle {
+    width: 100%; margin-top: 14px; padding: 9px;
+    background: #191919; border: 1px solid #393939; color: #888;
+    font-family: Georgia, serif; font-size: 11px;
+    letter-spacing: 2px; cursor: pointer; transition: .25s;
+}
+.subtitles-toggle:hover { color: white; border-color: #888; }
+.subtitles-toggle.active { color: #ff5500; border-color: #ff5500; }
+.subtitles-box {
+    display: none; margin-top: 12px; padding: 13px 8px; min-height: 55px;
+    background: #191919; border: 1px solid #393939; color: #aaa;
+    font-size: 13px; line-height: 1.5; text-align: center;
+}
+.subtitles-box.visible { display: block; animation: fadeIn .3s ease; }
+.crew-panel {
+    position: relative; width: min(620px, calc(100vw - 24px));
+    margin: 25px auto 50px; padding: 22px 18px 25px; text-align: center;
+}
+.crew-heading {
+    color: #aaa; font-size: 14px; letter-spacing: 5px; margin-bottom: 22px;
+}
+.member-area {
+    position: relative; display: flex; align-items: center;
+    justify-content: center; min-height: 245px;
+}
+.avatar-wrap {
+    width: clamp(145px, 30vw, 190px);
+    height: clamp(155px, 33vw, 205px);
+    border: 1px solid #444; padding: 5px; background: #151515;
+    transition: opacity .25s ease, transform .25s ease;
+}
+.avatar {
+    display: block; width: 100%; height: 100%;
+    object-fit: cover; filter: grayscale(1) contrast(1.15);
+}
+.arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 42px; height: 48px; background: transparent;
+    border: 1px solid transparent; color: #888;
+    font-family: Georgia, serif; font-size: 35px;
+    cursor: pointer; transition: .2s;
+}
+.arrow:hover { color: white; border-color: #555; background: #151515; }
+.arrow.left { left: 4%; }
+.arrow.right { right: 4%; }
+.nickname {
+    margin-top: 17px; color: #bbb; font-size: 17px;
+    letter-spacing: 2px; transition: opacity .2s ease;
+}
+.member-counter {
+    margin-top: 12px; color: #555; font-size: 11px; letter-spacing: 3px;
+}
+.close-button { margin-top: 22px; padding: 9px 20px; font-size: 11px; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 600px) {
+    .top { padding-top: 110px; }
+    .music { top: 15px; right: 12px; }
+    .music-button { font-size: 10px; padding: 8px; }
+    .crew-panel { margin-top: 20px; padding: 18px 10px; }
+    .member-area { min-height: 220px; }
+    .arrow.left { left: 0; }
+    .arrow.right { right: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="music">
+    <button class="music-button" id="musicButton">МУЗЫКАПАЦИКОВ</button>
+    <div class="dropdown" id="dropdown">
+        <div class="member-view" id="memberView">
+            <div class="music-heading">ВЫБЕРИ УЧАСТНИКА</div>
+            <div class="music-members" id="musicMembers"></div>
+        </div>
+        <div class="playlist-view" id="playlistView">
+            <button class="back-button" id="backButton">← НАЗАД К УЧАСТНИКАМ</button>
+            <div class="playlist-title" id="playlistTitle">zaghoulskoe333</div>
+            <iframe id="soundcloudPlayer" title="ДАУН CREW SoundCloud Playlist"
+                scrolling="no" allow="autoplay"
+                src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Faeg1s322%2Fsets%2Fwtracks&color=%23a18b70&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=true&visual=false">
+            </iframe>
+            <div class="volume-area">
+                <span class="volume-icon">♪</span>
+                <input class="volume-slider" id="volumeSlider" type="range"
+                    min="0" max="100" value="50" aria-label="Громкость музыки">
+                <span class="volume-value" id="volumeValue">50%</span>
+            </div>
+            <div class="music-options">
+                <button class="music-option" id="repeatButton"
+                    title="Повтор одного трека" aria-label="Повтор одного трека"
+                    aria-pressed="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M17 2l4 4-4 4"/>
+                        <path d="M3 11V9a3 3 0 0 1 3-3h15"/>
+                        <path d="M7 22l-4-4 4-4"/>
+                        <path d="M21 13v2a3 3 0 0 1-3 3H3"/>
+                    </svg>
+                    <span class="repeat-one">1</span>
+                    <span class="option-status" id="repeatStatus">ВЫКЛ</span>
+                </button>
+                <button class="music-option" id="shuffleButton"
+                    title="Перемешать треки" aria-label="Перемешать треки"
+                    aria-pressed="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M16 3h5v5"/>
+                        <path d="M4 20L21 3"/>
+                        <path d="M21 16v5h-5"/>
+                        <path d="M15 15l6 6"/>
+                        <path d="M4 4l5 5"/>
+                    </svg>
+                    <span class="option-status" id="shuffleStatus">ВЫКЛ</span>
+                </button>
+            </div>
+            <button class="subtitles-toggle" id="subtitlesButton" aria-pressed="false">
+                СУБТИТРЫ <span id="subtitlesStatus"> — ВЫКЛ</span>
+            </button>
+            <div class="subtitles-box" id="subtitlesBox">
+                Субтитры для этого трека пока не добавлены.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="top">
+    <button class="main-button" id="crewButton" aria-expanded="false">ДАУН CREW</button>
+</div>
+
+<div class="crew-panel" id="crewPanel">
+    <div class="crew-heading">УЧАСТНИКИ</div>
+    <div class="member-area">
+        <button class="arrow left" id="prev" aria-label="Предыдущий участник">‹</button>
+        <div class="avatar-wrap" id="avatarWrap">
+            <img class="avatar" id="avatar" src="avatars/1.jpg" alt="">
+        </div>
+        <button class="arrow right" id="next" aria-label="Следующий участник">›</button>
+    </div>
+    <div class="nickname" id="nickname"></div>
+    <div class="member-counter" id="memberCounter">01 / 10</div>
+    <button class="close-button" id="closeButton">ЗАКРЫТЬ</button>
+</div>
+
+<script src="https://w.soundcloud.com/player/api.js"></script>
+<script>
+const discordIds = [
+    "1505513287788265534",
+    "1187062611485929483",
+    "1517103355179176019",
+    "1118469197194874891",
+    "1561287964611321877",
+    "1564353903296905345",
+    "698483205514461231",
+    "1506936091683455069",
+    "1549336146356469760",
+    "1548021341456965685"
+];
+
+const members = [
+    "zaghoulskoe333", "KyROB", "любимый", "PROKYROR", "Ripoo",
+    "Rokos_777", "whitegolfclubphase", "Иммунитет",
+    "отец галая", "сыншлюхи"
+];
+
+const avatarUrls = {};
+const crewButton = document.getElementById("crewButton");
+const crewPanel = document.getElementById("crewPanel");
+const avatar = document.getElementById("avatar");
+const avatarWrap = document.getElementById("avatarWrap");
+const nickname = document.getElementById("nickname");
+const memberCounter = document.getElementById("memberCounter");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+const closeButton = document.getElementById("closeButton");
+const musicButton = document.getElementById("musicButton");
+const dropdown = document.getElementById("dropdown");
+const memberView = document.getElementById("memberView");
+const playlistView = document.getElementById("playlistView");
+const backButton = document.getElementById("backButton");
+const soundcloudPlayer = document.getElementById("soundcloudPlayer");
+const volumeSlider = document.getElementById("volumeSlider");
+const volumeValue = document.getElementById("volumeValue");
+const repeatButton = document.getElementById("repeatButton");
+const repeatStatus = document.getElementById("repeatStatus");
+const shuffleButton = document.getElementById("shuffleButton");
+const shuffleStatus = document.getElementById("shuffleStatus");
+const subtitlesButton = document.getElementById("subtitlesButton");
+const subtitlesStatus = document.getElementById("subtitlesStatus");
+const subtitlesBox = document.getElementById("subtitlesBox");
+
+let currentMember = 0;
+let isOpen = false;
+let memberTimer = null;
+let soundcloudWidget = null;
+let soundcloudReady = false;
+let repeatEnabled = false;
+let shuffleEnabled = false;
+let subtitlesEnabled = false;
+let currentTrackId = null;
+let currentTrackIndex = 0;
+let repeatJumping = false;
+let finishHandled = false;
+
+/* СЮДА МОЖНО ДОБАВЛЯТЬ СУБТИТРЫ */
+const lyricsByTrack = {};
+
+/* СОЗДАНИЕ КНОПОК ВСЕХ УЧАСТНИКОВ */
+const musicMembers = document.getElementById("musicMembers");
+
+discordIds.forEach((id, index) => {
+    const button = document.createElement("button");
+    button.className = "music-member " + (index === 0 ? "available" : "locked");
+    button.dataset.userId = id;
+
+    const name = document.createElement("span");
+    name.className = "member-name";
+    name.textContent = members[index];
+    button.appendChild(name);
+
+    if (index !== 0) {
+        button.disabled = true;
+        const soon = document.createElement("span");
+        soon.className = "soon-label";
+        soon.textContent = "SOON";
+        button.appendChild(soon);
+    } else {
+        button.addEventListener("click", () => {
+            memberView.classList.add("hidden");
+            playlistView.classList.add("active");
+            document.getElementById("playlistTitle").textContent = members[0];
+            initializeSoundCloud();
+        });
+    }
+
+    musicMembers.appendChild(button);
+});
+
+/* УЧАСТНИКИ */
+function showMember() {
+    clearTimeout(memberTimer);
+    avatarWrap.style.opacity = "0";
+    avatarWrap.style.transform = "scale(.95)";
+    nickname.style.opacity = "0";
+
+    memberTimer = setTimeout(() => {
+        const fallback = `avatars/${currentMember + 1}.jpg`;
+        const userId = discordIds[currentMember];
+        const newSrc = avatarUrls[userId] || fallback;
+
+        avatar.onload = () => {
+            avatarWrap.style.opacity = "1";
+            avatarWrap.style.transform = "scale(1)";
+        };
+        avatar.onerror = () => {
+            avatar.onerror = null;
+            if (avatar.src !== fallback) {
+                avatar.src = fallback;
+            } else {
+                avatarWrap.style.opacity = "1";
+                avatarWrap.style.transform = "scale(1)";
+            }
+        };
+
+        avatar.src = newSrc;
+        nickname.textContent = members[currentMember];
+        memberCounter.textContent =
+            String(currentMember + 1).padStart(2, "0") +
+            " / " + String(members.length).padStart(2, "0");
+        nickname.style.opacity = "1";
+
+        if (avatar.complete && avatar.naturalWidth > 0) {
+            avatarWrap.style.opacity = "1";
+            avatarWrap.style.transform = "scale(1)";
+        }
+    }, 180);
+}
+
+function changeMember(direction) {
+    if (!isOpen) return;
+    currentMember = (currentMember + direction + members.length) % members.length;
+    showMember();
+}
+
+function openCrew() {
+    isOpen = true;
+    crewPanel.classList.add("show");
+    crewButton.classList.add("active");
+    crewButton.setAttribute("aria-expanded", "true");
+    showMember();
+}
+
+function closeCrew() {
+    isOpen = false;
+    crewPanel.classList.remove("show");
+    crewButton.classList.remove("active");
+    crewButton.setAttribute("aria-expanded", "false");
+}
+
+crewButton.addEventListener("click", () => isOpen ? closeCrew() : openCrew());
+closeButton.addEventListener("click", closeCrew);
+prev.addEventListener("click", () => changeMember(-1));
+next.addEventListener("click", () => changeMember(1));
+
+/* МУЗЫКАЛЬНОЕ МЕНЮ */
+musicButton.addEventListener("click", () => dropdown.classList.toggle("show"));
+document.addEventListener("click", event => {
+    if (!musicButton.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove("show");
+    }
+});
+backButton.addEventListener("click", () => {
+    playlistView.classList.remove("active");
+    memberView.classList.remove("hidden");
+});
+
+/* SOUNDCLOUD */
+function initializeSoundCloud() {
+    if (soundcloudWidget) {
+        if (soundcloudReady) updateVolume();
+        return;
+    }
+    if (typeof SC === "undefined" || !SC.Widget) {
+        console.warn("SoundCloud API не загрузился. Попробуй открыть плейлист ещё раз.");
+        return;
+    }
+
+    soundcloudWidget = SC.Widget(soundcloudPlayer);
+    soundcloudWidget.bind(SC.Widget.Events.READY, () => {
+        soundcloudReady = true;
+        updateVolume();
+        updateCurrentTrack();
+    });
+    soundcloudWidget.bind(SC.Widget.Events.PLAY, updateCurrentTrack);
+    soundcloudWidget.bind(SC.Widget.Events.PLAY_PROGRESS, handleRepeatProgress);
+    soundcloudWidget.bind(SC.Widget.Events.FINISH, handleTrackFinish);
+}
+
+/* ГРОМКОСТЬ */
+function updateVolume() {
+    const value = Number(volumeSlider.value);
+    volumeValue.textContent = value + "%";
+    if (soundcloudWidget && soundcloudReady) soundcloudWidget.setVolume(value);
+}
+volumeSlider.addEventListener("input", updateVolume);
+
+/* ПОВТОР */
+repeatButton.addEventListener("click", () => {
+    repeatEnabled = !repeatEnabled;
+    repeatButton.classList.toggle("active", repeatEnabled);
+    repeatButton.setAttribute("aria-pressed", String(repeatEnabled));
+    repeatStatus.textContent = repeatEnabled ? "ВКЛ" : "ВЫКЛ";
+    repeatJumping = false;
+    finishHandled = false;
+});
+
+/* SHUFFLE */
+shuffleButton.addEventListener("click", () => {
+    shuffleEnabled = !shuffleEnabled;
+    shuffleButton.classList.toggle("active", shuffleEnabled);
+    shuffleButton.setAttribute("aria-pressed", String(shuffleEnabled));
+    shuffleStatus.textContent = shuffleEnabled ? "ВКЛ" : "ВЫКЛ";
+    finishHandled = false;
+});
+
+/* ПОВТОР ТРЕКА */
+function handleRepeatProgress(event) {
+    if (!repeatEnabled || !soundcloudWidget || repeatJumping) return;
+    if (!event || typeof event.relativePosition !== "number") return;
+    if (event.relativePosition < 0.15) {
+        repeatJumping = false;
+        finishHandled = false;
+    }
+    if (event.relativePosition >= 0.985 && !repeatJumping) {
+        repeatJumping = true;
+        finishHandled = true;
+        soundcloudWidget.seekTo(0);
+        setTimeout(() => soundcloudWidget.play(), 250);
+    }
+}
+
+/* ТЕКУЩИЙ ТРЕК */
+function updateCurrentTrack() {
+    if (!soundcloudWidget || !soundcloudReady) return;
+    soundcloudWidget.getCurrentSound(sound => {
+        if (!sound) return;
+        const newTrackId = String(sound.id);
+        if (newTrackId !== currentTrackId) {
+            currentTrackId = newTrackId;
+            repeatJumping = false;
+            finishHandled = false;
+        }
+        if (subtitlesEnabled) updateSubtitles();
+        soundcloudWidget.getSounds(sounds => {
+            if (!sounds) return;
+            const index = sounds.findIndex(track => String(track.id) === currentTrackId);
+            if (index >= 0) currentTrackIndex = index;
+        });
+    });
+}
+
+/* КОНЕЦ ТРЕКА: REPEAT И SHUFFLE */
+function handleTrackFinish() {
+    if (!soundcloudWidget || !soundcloudReady || finishHandled) return;
+    if (repeatEnabled) {
+        finishHandled = true;
+        repeatJumping = true;
+        soundcloudWidget.seekTo(0);
+        setTimeout(() => soundcloudWidget.play(), 250);
+        return;
+    }
+    if (!shuffleEnabled) return;
+    finishHandled = true;
+
+    soundcloudWidget.getCurrentSound(currentSound => {
+        soundcloudWidget.getSounds(sounds => {
+            if (!sounds || sounds.length < 2) {
+                finishHandled = false;
+                return;
+            }
+            const actualIndex = currentSound
+                ? sounds.findIndex(track => String(track.id) === String(currentSound.id))
+                : currentTrackIndex;
+            const available = sounds.map((track, index) => index).filter(index => index !== actualIndex);
+            if (!available.length) {
+                finishHandled = false;
+                return;
+            }
+            const randomIndex = available[Math.floor(Math.random() * available.length)];
+            soundcloudWidget.skip(randomIndex);
+            setTimeout(() => {
+                updateCurrentTrack();
+                soundcloudWidget.getCurrentSound(sound => {
+                    if (sound && String(sound.id) === String(currentTrackId)) {
+                        finishHandled = false;
+                    }
+                });
+            }, 2500);
+        });
+    });
+}
+
+/* СУБТИТРЫ */
+subtitlesButton.addEventListener("click", () => {
+    subtitlesEnabled = !subtitlesEnabled;
+    subtitlesButton.classList.toggle("active", subtitlesEnabled);
+    subtitlesButton.setAttribute("aria-pressed", String(subtitlesEnabled));
+    subtitlesStatus.textContent = subtitlesEnabled ? " — ВКЛ" : " — ВЫКЛ";
+    subtitlesBox.classList.toggle("visible", subtitlesEnabled);
+    if (subtitlesEnabled) updateSubtitles();
+});
+
+function updateSubtitles() {
+    if (!subtitlesEnabled || !soundcloudWidget || !soundcloudReady) return;
+    if (!currentTrackId) {
+        subtitlesBox.textContent = "Загрузка информации о треке...";
+        return;
+    }
+    const lines = lyricsByTrack[currentTrackId];
+    if (!lines || !lines.length) {
+        subtitlesBox.textContent = "Субтитры для этого трека пока не добавлены.";
+        return;
+    }
+    soundcloudWidget.getPosition(position => {
+        const seconds = position / 1000;
+        let currentLine = null;
+        for (const line of lines) {
+            if (seconds >= line.time) currentLine = line;
+            else break;
+        }
+        subtitlesBox.textContent = currentLine ? currentLine.text : "♪";
+    });
+}
+
+setInterval(() => {
+    if (subtitlesEnabled) updateSubtitles();
+}, 200);
+
+/* СИНХРОНИЗАЦИЯ DISCORD */
+async function syncDiscordNames() {
+    try {
+        const response = await fetch("/api/members", { cache: "no-store" });
+        if (!response.ok) throw new Error("Сервер не отвечает");
+
+        const data = await response.json();
+        const discordMembers = data.members || {};
+        const discordAvatars = data.avatars || {};
+
+        let currentMemberChanged = false;
+
+        for (let i = 0; i < discordIds.length; i++) {
+            const id = discordIds[i];
+            const oldName = members[i];
+            const oldAvatar = avatarUrls[id];
+
+            if (discordMembers[id]) members[i] = discordMembers[id];
+            if (discordAvatars[id]) avatarUrls[id] = discordAvatars[id];
+
+            if (i === currentMember &&
+                (oldName !== members[i] || oldAvatar !== avatarUrls[id])) {
+                currentMemberChanged = true;
+            }
+
+            const nameElement = document.querySelector(
+                `[data-user-id="${id}"] .member-name`
+            );
+            if (nameElement) nameElement.textContent = members[i];
+        }
+
+        if (isOpen && currentMemberChanged) showMember();
+
+        if (playlistView.classList.contains("active")) {
+            document.getElementById("playlistTitle").textContent = members[0];
+        }
+    } catch (error) {
+        console.warn("Не удалось обновить данные Discord:", error.message);
+    }
+}
+
+/* СТАРТ */
+showMember();
+syncDiscordNames();
+setInterval(syncDiscordNames, 15000);
+</script>
+</body>
+</html>
