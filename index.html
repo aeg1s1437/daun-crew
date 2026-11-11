@@ -36,27 +36,27 @@ body {
 .lamp svg { display: block; width: 100%; height: 100%; overflow: visible; opacity: 1; }
 .lamp svg path, .lamp svg circle { opacity: 1; }
 .lamp-glow {
-    opacity: .34;
-    filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 13px #dce7ff);
+    opacity: .62;
+    filter: drop-shadow(0 0 9px #fff) drop-shadow(0 0 22px #dce7ff) drop-shadow(0 0 34px #dce7ff);
     transition: opacity .18s ease, filter .18s ease;
 }
 .lamp-bulb {
-    fill: #f5f7ff;
-    filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 13px #dce7ff);
+    fill: #fff;
+    filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 19px #dce7ff);
     transition: opacity .18s ease, filter .18s ease;
 }
 .lamp.flickering .lamp-glow { animation: lampFlicker .72s steps(1, end) both; }
 .lamp.flickering .lamp-bulb { animation: bulbFlicker .72s steps(1, end) both; }
 .lamp.dimmed .lamp-glow {
-    opacity: .12;
-    filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 7px #dce7ff);
+    opacity: .22;
+    filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 12px #dce7ff);
 }
 .lamp.dimmed .lamp-bulb {
-    opacity: .48;
-    filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px #dce7ff);
+    opacity: .62;
+    filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 9px #dce7ff);
 }
 @keyframes lampFlicker {
-    0%, 18%, 43%, 66%, 100% { opacity: .34; }
+    0%, 18%, 43%, 66%, 100% { opacity: .62; }
     8%, 30%, 55%, 82% { opacity: .04; }
 }
 @keyframes bulbFlicker {
@@ -298,48 +298,23 @@ body {
             <svg viewBox="0 0 140 145" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <radialGradient id="lampLight">
-                        <stop stop-color="#fff" stop-opacity=".95"/>
-                        <stop offset=".3" stop-color="#eef3ff" stop-opacity=".5"/>
+                        <stop stop-color="#fff" stop-opacity="1"/>
+                        <stop offset=".38" stop-color="#eef3ff" stop-opacity=".65"/>
                         <stop offset="1" stop-color="#dce7ff" stop-opacity="0"/>
                     </radialGradient>
                 </defs>
-
-                <!-- Плоский старый подвес -->
-                <path d="M70 1 L70 34" stroke="#09090a" stroke-width="6"/>
-                <path d="M68 2 L68 33" stroke="#77787a" stroke-width="1" opacity=".7"/>
-                <path d="M61 29 L79 29 L81 39 L59 39 Z"
-                      fill="#252629" stroke="#858689" stroke-width="1.5"/>
-                <path d="M64 31l-2 6M75 31l2 6" stroke="#aaa" stroke-width="1" opacity=".55"/>
-
-                <!-- Свет за корпусом: виден только снизу и по краям -->
-                <ellipse class="lamp-glow" cx="70" cy="116" rx="37" ry="27" fill="url(#lampLight)"/>
-
-                <!-- Двухмерный потёртый металлический абажур -->
-                <path d="M37 42 L103 42 L119 91 Q70 105 21 91 Z"
-                      fill="#17181b" stroke="#858689" stroke-width="2.5"
-                      stroke-linejoin="round"/>
-                <path d="M40 45 L100 45 L112 86 Q70 98 28 86 Z"
-                      fill="#292a2d" stroke="#08090a" stroke-width="2"/>
-                <path d="M42 47 L35 82 M51 46 L47 66 M96 47 L105 80
-                         M82 48 L85 60 M31 84 L45 88 M91 91 L108 86"
-                      fill="none" stroke="#929397" stroke-width="1.5" opacity=".65"/>
-                <path d="M57 45l-3 8M72 47l-2 5M108 70l-5 7M38 70l4 3"
-                      fill="none" stroke="#090a0b" stroke-width="2.2"/>
-                <path d="M37 42 L103 42" fill="none" stroke="#b0b1b3" stroke-width="1.2" opacity=".65"/>
-                <path d="M21 91 Q70 104 119 91 L116 99 Q70 112 24 99 Z"
-                      fill="#101113" stroke="#77787b" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M28 95 Q70 106 112 95" fill="none" stroke="#050506" stroke-width="2.5"/>
-                <path d="M39 45l-2 5M99 45l2 5" stroke="#08090a" stroke-width="2"/>
-                <circle cx="39" cy="46" r="2" fill="#a1a2a4"/>
-                <circle cx="99" cy="46" r="2" fill="#a1a2a4"/>
-
-                <!-- Лампочка выглядывает из-под нижнего края -->
-                <path d="M57 94 Q70 87 83 94 L80 111 Q70 119 60 111 Z"
-                      fill="#bfc5cf" opacity=".2"/>
-                <path class="lamp-bulb"
-                      d="M62 94 Q70 89 78 94 L76 108 Q70 114 64 108 Z"/>
-                <path d="M65 110h10v5H65z" fill="#303135" stroke="#8a8b8e" stroke-width="1"/>
-                <path d="M66 112h8M66 114h8" stroke="#aaa" stroke-width=".7" opacity=".6"/>
+                <path d="M70 1V34" stroke="#111214" stroke-width="6"/>
+                <path d="M68 2V33" stroke="#77787a" stroke-width="1"/>
+                <path d="M60 29h20v10H60z" fill="#292a2d" stroke="#88898c" stroke-width="1.5"/>
+                <ellipse class="lamp-glow" cx="70" cy="116" rx="48" ry="37" fill="url(#lampLight)"/>
+                <path d="M37 42h66l16 49q-49 14-98 0z" fill="#17181b" stroke="#858689" stroke-width="2.5" stroke-linejoin="round"/>
+                <path d="M42 46h56l12 39q-40 11-80 0z" fill="#292a2d" stroke="#090a0b" stroke-width="2"/>
+                <path d="M43 48l-8 34m19-34-4 17m45-17 8 33M80 48l3 12M31 85l15 3m45 2 17-5" fill="none" stroke="#999a9d" stroke-width="1.5" opacity=".75"/>
+                <path d="M37 42h66" stroke="#b8b9bb" stroke-width="1.4" opacity=".7"/>
+                <path d="M21 91q49 13 98 0l-3 8q-46 14-92 0z" fill="#101113" stroke="#77787b" stroke-width="2"/>
+                <path d="M56 94q14-10 28 0l-4 18q-10 7-20 0z" fill="#dce7ff" opacity=".28"/>
+                <path class="lamp-bulb" d="M61 94q9-7 18 0l-3 16q-6 6-12 0z"/>
+                <path d="M65 110h10v5H65z" fill="#303135" stroke="#aaa" stroke-width="1"/>
             </svg>
         </div>
         
