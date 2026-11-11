@@ -67,24 +67,28 @@ body {
     border-radius: 45% 45% 48% 48%;
     background: radial-gradient(ellipse at 35% 25%, #ddd, #777 55%, #252525);
     box-shadow: 0 0 10px 4px rgba(205,205,205,.18), 0 0 32px 13px rgba(190,190,190,.08);
-    animation: bulbFlicker 6s infinite;
 }
 .lamp-glow {
     position: absolute; top: 105px; left: 50%;
     width: 270px; height: 155px; transform: translateX(-50%);
     background: radial-gradient(ellipse at 50% 0%, rgba(220,220,220,.13), rgba(160,160,160,.055) 36%, transparent 72%);
-    filter: blur(10px); mix-blend-mode: screen;
-    animation: glowFlicker 6s infinite; z-index: -1;
+    filter: blur(10px); mix-blend-mode: screen; z-index: -1;
 }
-@keyframes bulbFlicker {
-    0%, 78%, 83%, 88%, 100% { opacity: 1; box-shadow: 0 0 12px 5px rgba(214,190,128,.42); }
-    79%, 81%, 85% { opacity: .25; box-shadow: 0 0 3px 1px rgba(214,190,128,.12); }
-    90%, 96% { opacity: .65; }
+.lamp-bulb.flicker { animation: bulbFlash .55s ease-out; }
+.lamp-glow.flicker { animation: glowFlash .55s ease-out; }
+@keyframes bulbFlash {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    18% { opacity: .18; filter: brightness(.45); }
+    34% { opacity: .9; filter: brightness(1.5); }
+    48% { opacity: .3; filter: brightness(.6); }
+    68% { opacity: 1; filter: brightness(1.8); }
 }
-@keyframes glowFlicker {
-    0%, 78%, 83%, 88%, 100% { opacity: 1; }
-    79%, 81%, 85% { opacity: .12; }
-    90%, 96% { opacity: .55; }
+@keyframes glowFlash {
+    0%, 100% { opacity: 1; }
+    18% { opacity: .12; }
+    34% { opacity: .95; }
+    48% { opacity: .2; }
+    68% { opacity: 1.35; }
 }
 .main-button {
     background: transparent; color: #aaa; border: 1px solid #555;
@@ -720,6 +724,25 @@ async function syncDiscordNames() {
 }
 
 /* СТАРТ */
+/* НЕРЕГУЛЯРНОЕ МЕРЦАНИЕ ЛАМПЫ: РАЗ В 4–6 СЕКУНД */
+const lampBulb = document.querySelector(".lamp-bulb");
+const lampGlow = document.querySelector(".lamp-glow");
+function scheduleLampFlicker() {
+    setTimeout(() => {
+        lampBulb.classList.remove("flicker");
+        lampGlow.classList.remove("flicker");
+        void lampBulb.offsetWidth;
+        lampBulb.classList.add("flicker");
+        lampGlow.classList.add("flicker");
+        setTimeout(() => {
+            lampBulb.classList.remove("flicker");
+            lampGlow.classList.remove("flicker");
+        }, 600);
+        scheduleLampFlicker();
+    }, 4000 + Math.random() * 2000);
+}
+scheduleLampFlicker();
+
 showMember();
 syncDiscordNames();
 setInterval(syncDiscordNames, 15000);
