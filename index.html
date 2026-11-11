@@ -310,6 +310,9 @@ body {
                 <path d="M62 29 Q70 25 78 30 L80 39 Q70 43 60 39 Z" fill="url(#lampIron)" stroke="#77787a" stroke-width="1"/>
                 <path d="M65 31l-2 6M74 30l2 6" stroke="#999a9c" stroke-width="1" opacity=".55"/>
 
+                <!-- Свет находится за абажуром, поэтому корпус частично перекрывает ореол -->
+                <ellipse class="lamp-glow" cx="70" cy="112" rx="48" ry="31" fill="url(#lampLight)"/>
+
                 <!-- Неровный металлический абажур -->
                 <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"
                       fill="#17181b" stroke="#a0a1a3" stroke-width="2.2"/>
@@ -330,7 +333,7 @@ body {
                 <circle cx="99" cy="47" r="2" fill="#080809" stroke="#77787a" stroke-width=".8"/>
 
                 <!-- Холодная лампочка и свет -->
-                <ellipse class="lamp-glow" cx="70" cy="112" rx="48" ry="31" fill="url(#lampLight)"/>
+
                 <path d="M57 91 Q70 86 83 92 L80 112 Q70 119 60 112 Z"
                       fill="#bfc5cf" opacity=".22"/>
                 <path class="lamp-bulb" d="M62 94 Q70 89 78 94 L76 108 Q70 114 64 108 Z"/>
