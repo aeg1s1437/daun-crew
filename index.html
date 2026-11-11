@@ -36,24 +36,21 @@ body {
 .lamp svg { display: block; width: 100%; height: 100%; overflow: visible; opacity: 1; }
 .lamp svg path, .lamp svg circle { opacity: 1; }
 .lamp-glow {
-    opacity: .62;
-    filter: drop-shadow(0 0 9px #fff) drop-shadow(0 0 22px #dce7ff) drop-shadow(0 0 34px #dce7ff);
-    transition: opacity .18s ease, filter .18s ease;
+    opacity: .82;
+    filter: none;
+    transition: opacity .18s ease;
 }
 .lamp-bulb {
     fill: #fff;
-    filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 19px #dce7ff);
+    filter: drop-shadow(0 0 5px rgba(255,255,255,.95));
     transition: opacity .18s ease, filter .18s ease;
 }
 .lamp.flickering .lamp-glow { animation: lampFlicker .72s steps(1, end) both; }
 .lamp.flickering .lamp-bulb { animation: bulbFlicker .72s steps(1, end) both; }
-.lamp.dimmed .lamp-glow {
-    opacity: .22;
-    filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 12px #dce7ff);
-}
+.lamp.dimmed .lamp-glow { opacity: .25; }
 .lamp.dimmed .lamp-bulb {
     opacity: .62;
-    filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 9px #dce7ff);
+    filter: drop-shadow(0 0 3px rgba(255,255,255,.8));
 }
 @keyframes lampFlicker {
     0%, 18%, 43%, 66%, 100% { opacity: .62; }
@@ -297,24 +294,33 @@ body {
         <div class="lamp" aria-hidden="true">
             <svg viewBox="0 0 140 145" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <radialGradient id="lampLight">
+                    <radialGradient id="lampLight" cx=".5" cy=".08" r=".92">
                         <stop stop-color="#fff" stop-opacity="1"/>
-                        <stop offset=".38" stop-color="#eef3ff" stop-opacity=".65"/>
+                        <stop offset=".34" stop-color="#eef3ff" stop-opacity=".82"/>
+                        <stop offset=".72" stop-color="#dce7ff" stop-opacity=".3"/>
                         <stop offset="1" stop-color="#dce7ff" stop-opacity="0"/>
                     </radialGradient>
+                    <linearGradient id="lampBeam" x1="0" y1="0" x2="0" y2="1">
+                        <stop stop-color="#f7f9ff" stop-opacity=".72"/>
+                        <stop offset="1" stop-color="#dce7ff" stop-opacity="0"/>
+                    </linearGradient>
                     <clipPath id="lampGlowBelowRim">
-                        <rect x="0" y="98" width="140" height="47"/>
+                        <rect x="0" y="99" width="140" height="46"/>
                     </clipPath>
                 </defs>
                 <path d="M70 1V34" stroke="#111214" stroke-width="6"/>
                 <path d="M68 2V33" stroke="#77787a" stroke-width="1"/>
                 <path d="M60 29h20v10H60z" fill="#292a2d" stroke="#88898c" stroke-width="1.5"/>
-                <ellipse class="lamp-glow" cx="70" cy="116" rx="48" ry="37" fill="url(#lampLight)" clip-path="url(#lampGlowBelowRim)"/>
+                
                 <path d="M37 42h66l16 49q-49 14-98 0z" fill="#17181b" stroke="#858689" stroke-width="2.5" stroke-linejoin="round"/>
                 <path d="M42 46h56l12 39q-40 11-80 0z" fill="#292a2d" stroke="#090a0b" stroke-width="2"/>
                 <path d="M43 48l-8 34m19-34-4 17m45-17 8 33M80 48l3 12M31 85l15 3m45 2 17-5" fill="none" stroke="#999a9d" stroke-width="1.5" opacity=".75"/>
                 <path d="M37 42h66" stroke="#b8b9bb" stroke-width="1.4" opacity=".7"/>
                 <path d="M21 91q49 13 98 0l-3 8q-46 14-92 0z" fill="#101113" stroke="#77787b" stroke-width="2"/>
+                <g clip-path="url(#lampGlowBelowRim)">
+                    <path d="M54 98Q70 95 86 98L111 145H29Z" fill="url(#lampBeam)" opacity=".78"/>
+                    <ellipse class="lamp-glow" cx="70" cy="111" rx="42" ry="29" fill="url(#lampLight)"/>
+                </g>
                 <path d="M56 94q14-10 28 0l-4 18q-10 7-20 0z" fill="#dce7ff" opacity=".28"/>
                 <path class="lamp-bulb" d="M61 94q9-7 18 0l-3 16q-6 6-12 0z"/>
                 <path d="M65 110h10v5H65z" fill="#303135" stroke="#aaa" stroke-width="1"/>
