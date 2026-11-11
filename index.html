@@ -25,10 +25,10 @@ body {
 
 .lamp {
     position: absolute;
-    top: -112px;
+    top: -119px;
     left: 50%;
-    width: 92px;
-    height: 112px;
+    width: 116px;
+    height: 120px;
     transform: translateX(-50%);
     pointer-events: none;
     overflow: visible;
@@ -36,18 +36,12 @@ body {
 .lamp svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .lamp-glow {
     fill: #f4f7ff;
-    opacity: .24;
-    filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 18px #dce7ff);
+    opacity: .3;
+    filter: drop-shadow(0 0 7px #fff) drop-shadow(0 0 17px #dce7ff);
 }
 .lamp-bulb {
-    fill: #f7f8ff;
-    filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 12px #dce7ff);
-}
-.lamp-scratches {
-    fill: none;
-    stroke: #8c8d91;
-    stroke-width: .8;
-    opacity: .55;
+    fill: #f5f7ff;
+    filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 13px #dce7ff);
 }
 .main-button {
     background: transparent; color: #aaa; border: 1px solid #555;
@@ -281,32 +275,64 @@ body {
 <div class="top">
     <div class="title-stage">
         <div class="lamp" aria-hidden="true">
-            <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 140 145" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="wornMetal" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0" stop-color="#55565a"/>
-                        <stop offset=".35" stop-color="#202124"/>
-                        <stop offset=".7" stop-color="#090a0c"/>
-                        <stop offset="1" stop-color="#48494d"/>
+                    <linearGradient id="lampIron" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#77787a"/>
+                        <stop offset=".18" stop-color="#343538"/>
+                        <stop offset=".52" stop-color="#090a0b"/>
+                        <stop offset=".78" stop-color="#242527"/>
+                        <stop offset="1" stop-color="#66676a"/>
                     </linearGradient>
-                    <radialGradient id="coldLampGlow">
-                        <stop offset="0" stop-color="#fff" stop-opacity=".8"/>
+                    <linearGradient id="lampRim" x1="0" y1="0" x2="0" y2="1">
+                        <stop stop-color="#77787b"/>
+                        <stop offset=".35" stop-color="#17181a"/>
+                        <stop offset="1" stop-color="#050506"/>
+                    </linearGradient>
+                    <radialGradient id="lampLight">
+                        <stop stop-color="#fff" stop-opacity=".95"/>
+                        <stop offset=".3" stop-color="#eef3ff" stop-opacity=".5"/>
                         <stop offset="1" stop-color="#dce7ff" stop-opacity="0"/>
                     </radialGradient>
+                    <filter id="lampWear">
+                        <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="8"/>
+                        <feColorMatrix values=".35 0 0 0 .25 .35 0 0 0 .25 .35 0 0 0 .27 0 0 0 .22 0"/>
+                    </filter>
+                    <clipPath id="shadeClip">
+                        <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"/>
+                    </clipPath>
                 </defs>
-                <path d="M50 0V25" stroke="#55565a" stroke-width="3"/>
-                <path d="M46 2V23" stroke="#17181a" stroke-width="1"/>
-                <path d="M44 24h12v5H44z" fill="#292a2d" stroke="#66676b" stroke-width="1"/>
-                <path d="M35 28h30l-3 9H38z" fill="url(#wornMetal)" stroke="#77787c" stroke-width="1"/>
-                <path d="M38 35h24l13 39H25z" fill="url(#wornMetal)" stroke="#77787c" stroke-width="1.4"/>
-                <path d="M25 74Q50 80 75 74L80 81Q50 89 20 81z" fill="#17181a" stroke="#77787c" stroke-width="1.3"/>
-                <path d="M31 43l-5 24M39 39l-3 12M66 43l5 22M47 39l-2 7M58 54l3 12" class="lamp-scratches"/>
-                <path d="M34 76Q50 72 66 76L61 91H39z" fill="#242529" stroke="#77787c" stroke-width="1"/>
-                <ellipse cx="50" cy="91" rx="22" ry="17" fill="url(#coldLampGlow)" class="lamp-glow"/>
-                <path d="M43 80h14l3 12q-10 7-20 0z" fill="#cfd8e8" opacity=".22"/>
-                <path d="M45 81h10l2 10q-7 4-14 0z" class="lamp-bulb"/>
-                <path d="M46 94h8v4h-8z" fill="#55565a" stroke="#88898d" stroke-width=".7"/>
-                <path d="M40 31l-2 5M61 31l-2 5M29 77l4 1M67 78l4-1" stroke="#a0a1a5" stroke-width="1" opacity=".5"/>
+
+                <!-- Старый подвес и потемневший кабель -->
+                <path d="M70 0 C69 12 73 21 70 34" fill="none" stroke="#09090a" stroke-width="5"/>
+                <path d="M68 1 C68 13 70 23 68 34" fill="none" stroke="#77787a" stroke-width="1" opacity=".55"/>
+                <path d="M62 29 Q70 25 78 30 L80 39 Q70 43 60 39 Z" fill="url(#lampIron)" stroke="#77787a" stroke-width="1"/>
+                <path d="M65 31l-2 6M74 30l2 6" stroke="#999a9c" stroke-width="1" opacity=".55"/>
+
+                <!-- Неровный металлический абажур -->
+                <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"
+                      fill="url(#lampIron)" stroke="#77787a" stroke-width="2"/>
+                <g clip-path="url(#shadeClip)" opacity=".42">
+                    <rect x="18" y="35" width="104" height="76" filter="url(#lampWear)"/>
+                    <path d="M42 44l-8 36M51 41l-5 21M96 46l11 35M78 43l-3 15M30 84l13 4M91 91l18-5"
+                          stroke="#c0c0c2" stroke-width="1.2" fill="none"/>
+                    <path d="M58 40l-2 8M84 47l3 7M109 78l-5 8M25 74l6 3"
+                          stroke="#080809" stroke-width="2" fill="none"/>
+                </g>
+                <path d="M37 42 Q69 34 103 43" fill="none" stroke="#a0a1a3" stroke-width="1.2" opacity=".65"/>
+                <path d="M21 91 Q69 105 119 91 L116 99 Q70 114 24 99 Z"
+                      fill="url(#lampRim)" stroke="#858689" stroke-width="1.5"/>
+                <path d="M27 94 Q70 106 113 94" fill="none" stroke="#080809" stroke-width="2"/>
+                <circle cx="39" cy="46" r="2" fill="#080809" stroke="#77787a" stroke-width=".8"/>
+                <circle cx="99" cy="47" r="2" fill="#080809" stroke="#77787a" stroke-width=".8"/>
+
+                <!-- Холодная лампочка и свет -->
+                <ellipse class="lamp-glow" cx="70" cy="112" rx="48" ry="31" fill="url(#lampLight)"/>
+                <path d="M57 91 Q70 86 83 92 L80 112 Q70 119 60 112 Z"
+                      fill="#bfc5cf" opacity=".22"/>
+                <path class="lamp-bulb" d="M62 94 Q70 89 78 94 L76 108 Q70 114 64 108 Z"/>
+                <path d="M65 110h10v5H65z" fill="#303135" stroke="#8a8b8e" stroke-width="1"/>
+                <path d="M66 112h8M66 114h8" stroke="#aaa" stroke-width=".7" opacity=".6"/>
             </svg>
         </div>
         
