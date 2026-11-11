@@ -36,13 +36,32 @@ body {
 .lamp svg { display: block; width: 100%; height: 100%; overflow: visible; opacity: 1; }
 .lamp svg path, .lamp svg circle { opacity: 1; }
 .lamp-glow {
-    fill: #f4f7ff;
-    opacity: .3;
-    filter: drop-shadow(0 0 7px #fff) drop-shadow(0 0 17px #dce7ff);
+    opacity: .34;
+    filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 13px #dce7ff);
+    transition: opacity .18s ease, filter .18s ease;
 }
 .lamp-bulb {
     fill: #f5f7ff;
     filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 13px #dce7ff);
+    transition: opacity .18s ease, filter .18s ease;
+}
+.lamp.flickering .lamp-glow { animation: lampFlicker .72s steps(1, end) both; }
+.lamp.flickering .lamp-bulb { animation: bulbFlicker .72s steps(1, end) both; }
+.lamp.dimmed .lamp-glow {
+    opacity: .12;
+    filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 7px #dce7ff);
+}
+.lamp.dimmed .lamp-bulb {
+    opacity: .48;
+    filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px #dce7ff);
+}
+@keyframes lampFlicker {
+    0%, 18%, 43%, 66%, 100% { opacity: .34; }
+    8%, 30%, 55%, 82% { opacity: .04; }
+}
+@keyframes bulbFlicker {
+    0%, 18%, 43%, 66%, 100% { opacity: 1; }
+    8%, 30%, 55%, 82% { opacity: .18; }
 }
 .main-button {
     background: transparent; color: #aaa; border: 1px solid #555;
@@ -311,7 +330,7 @@ body {
                 <path d="M65 31l-2 6M74 30l2 6" stroke="#999a9c" stroke-width="1" opacity=".55"/>
 
                 <!-- Свет находится за абажуром, поэтому корпус частично перекрывает ореол -->
-                <ellipse class="lamp-glow" cx="70" cy="112" rx="48" ry="31" fill="url(#lampLight)"/>
+                <ellipse class="lamp-glow" cx="70" cy="116" rx="37" ry="27" fill="url(#lampLight)"/>
 
                 <!-- Неровный металлический абажур -->
                 <path d="M37 42 Q69 34 103 43 L119 91 Q72 108 21 91 Z"
@@ -735,6 +754,25 @@ async function syncDiscordNames() {
         console.warn("Не удалось обновить данные Discord:", error.message);
     }
 }
+
+/* МЕРЦАНИЕ ЛАМПЫ: короткий сбой, затем 2 секунды приглушённого света */
+const lamp = document.querySelector(".lamp");
+function scheduleLampFlicker() {
+    setTimeout(() => {
+        lamp.classList.remove("dimmed");
+        lamp.classList.add("flickering");
+        setTimeout(() => {
+            lamp.classList.remove("flickering");
+            lamp.classList.add("dimmed");
+            setTimeout(() => {
+                lamp.classList.remove("dimmed");
+                scheduleLampFlicker();
+            }, 2000);
+        }, 720);
+    }, 4000 + Math.random() * 2000);
+}
+
+scheduleLampFlicker();
 
 /* СТАРТ */
 showMember();
