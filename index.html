@@ -35,30 +35,21 @@ body {
 }
 .lamp svg { display: block; width: 100%; height: 100%; overflow: visible; opacity: 1; }
 .lamp svg path, .lamp svg circle { opacity: 1; }
-.lamp-glow {
-    opacity: .82;
-    filter: none;
+.lamp-light {
+    opacity: .9;
     transition: opacity .18s ease;
 }
 .lamp-bulb {
     fill: #fff;
     filter: drop-shadow(0 0 5px rgba(255,255,255,.95));
-    transition: opacity .18s ease, filter .18s ease;
 }
-.lamp.flickering .lamp-glow { animation: lampFlicker .72s steps(1, end) both; }
-.lamp.flickering .lamp-bulb { animation: bulbFlicker .72s steps(1, end) both; }
-.lamp.dimmed .lamp-glow { opacity: .25; }
-.lamp.dimmed .lamp-bulb {
-    opacity: .62;
-    filter: drop-shadow(0 0 3px rgba(255,255,255,.8));
+.lamp.flickering .lamp-light {
+    animation: lampWholeLightFlicker .72s steps(1, end) both;
 }
-@keyframes lampFlicker {
-    0%, 18%, 43%, 66%, 100% { opacity: .62; }
-    8%, 30%, 55%, 82% { opacity: .04; }
-}
-@keyframes bulbFlicker {
-    0%, 18%, 43%, 66%, 100% { opacity: 1; }
-    8%, 30%, 55%, 82% { opacity: .18; }
+.lamp.dimmed .lamp-light { opacity: .3; }
+@keyframes lampWholeLightFlicker {
+    0%, 18%, 43%, 66%, 100% { opacity: .9; }
+    8%, 30%, 55%, 82% { opacity: .03; }
 }
 .main-button {
     background: transparent; color: #aaa; border: 1px solid #555;
@@ -317,12 +308,12 @@ body {
                 <path d="M43 48l-8 34m19-34-4 17m45-17 8 33M80 48l3 12M31 85l15 3m45 2 17-5" fill="none" stroke="#999a9d" stroke-width="1.5" opacity=".75"/>
                 <path d="M37 42h66" stroke="#b8b9bb" stroke-width="1.4" opacity=".7"/>
                 <path d="M21 91q49 13 98 0l-3 8q-46 14-92 0z" fill="#101113" stroke="#77787b" stroke-width="2"/>
-                <g clip-path="url(#lampGlowBelowRim)">
+                <g class="lamp-light" clip-path="url(#lampGlowBelowRim)">
                     <path d="M54 98Q70 95 86 98L111 145H29Z" fill="url(#lampBeam)" opacity=".78"/>
-                    <ellipse class="lamp-glow" cx="70" cy="111" rx="42" ry="29" fill="url(#lampLight)"/>
+                    <ellipse cx="70" cy="111" rx="42" ry="29" fill="url(#lampLight)"/>
+                    <path d="M56 94q14-10 28 0l-4 18q-10 7-20 0z" fill="#dce7ff" opacity=".28"/>
+                    <path class="lamp-bulb" d="M61 94q9-7 18 0l-3 16q-6 6-12 0z"/>
                 </g>
-                <path d="M56 94q14-10 28 0l-4 18q-10 7-20 0z" fill="#dce7ff" opacity=".28"/>
-                <path class="lamp-bulb" d="M61 94q9-7 18 0l-3 16q-6 6-12 0z"/>
                 <path d="M65 110h10v5H65z" fill="#303135" stroke="#aaa" stroke-width="1"/>
             </svg>
         </div>
